@@ -1,123 +1,121 @@
-# Vague Language Detector
+# Language Detection Tools
 
-This is a small FastAPI app that detects whether a statement **is vague** (binary yes/no), optimized for statements that are **100% true in all cases**.
+A collection of FastAPI-based language analysis services for detecting cognitive distortions and vague language patterns in text.
 
-## Run it (copy/paste)
+## Projects
 
-### 1) Download the project and open it in Terminal
+### Vague Language Detector
 
-If you have git installed:
+A lightweight FastAPI service that performs binary detection of vague language patterns in statements. The detector identifies cognitive distortions by analyzing text for patterns that are not guaranteed to be 100% true in all cases.
 
-```bash
-git clone https://github.com/jacpagan/vague-language-detector.git
-cd vague-language-detector
-```
+**Features:**
+- Binary classification: returns `true` or `false` for cognitive distortion detection
+- Fast, deterministic heuristics-based detection
+- No data persistence or logging of user text
+- Low latency (<100ms typical response time)
 
-If you downloaded a ZIP: unzip it, then `cd` into the unzipped folder (it will usually be named `vague-language-detector`).
+**Detection Patterns:**
+- Be-verbs ("to be" verbs: am/is/are/was/were/be/being/been)
+- Absolutist language (always/never/everything/nothing/everyone/no one)
+- Binary framing markers (either/or, all or nothing)
+- Global identity-label statements (e.g., "I am a failure")
 
-```bash
-cd vague-language-detector
-```
+**API Endpoints:**
+- `GET /health` - Health check endpoint
+- `POST /classify` - Classify text for cognitive distortions
 
-### 2) Create and activate a virtual environment
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-(If you see `(.venv)` at the start of your prompt, it’s activated.)
-
-### 3) Install dependencies
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-### 4) Start the server
-
-```bash
-python -m uvicorn vague_language_detector.main:app --host 127.0.0.1 --port 8000
-```
-
-Leave that running.
-
-### 5) Open the API docs in your browser
-
-- Swagger UI: `http://127.0.0.1:8000/docs`
-
-## Examples (copy/paste)
-
-Open a **second** Terminal window/tab (keep the server running), then:
-
-### Health check
-
-```bash
-curl http://127.0.0.1:8000/health
-```
-
-Expected response:
-
-```json
-{"status":"ok"}
-```
-
-### Classify text
-
+**Example Request:**
 ```bash
 curl -X POST http://127.0.0.1:8000/classify \
   -H 'Content-Type: application/json' \
   -d '{"text":"I always mess everything up."}'
 ```
 
-You’ll get a JSON response including `has_cognitive_distortion`.
-
-## Run tests
-
-```bash
-source .venv/bin/activate
-python -m pytest
+**Example Response:**
+```json
+{
+  "has_cognitive_distortion": true
+}
 ```
 
-## Stress test (load test)
+### Objective Language Detector
 
-Start the server in one terminal:
+*Coming soon* - A service for detecting objective vs. subjective language patterns.
 
+## Quick Start
+
+### Prerequisites
+- Python 3.8+
+- pip
+
+### Installation
+
+1. Clone the repository:
 ```bash
-source .venv/bin/activate
+git clone <repository-url>
+cd <repository-name>
+```
+
+2. Create and activate a virtual environment:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### Running the Vague Language Detector
+
+Start the FastAPI server:
+```bash
 python -m uvicorn vague_language_detector.main:app --host 127.0.0.1 --port 8000
 ```
 
-Then, in a second terminal:
+The API will be available at:
+- API: `http://127.0.0.1:8000`
+- Interactive docs: `http://127.0.0.1:8000/docs`
+- Alternative docs: `http://127.0.0.1:8000/redoc`
 
+### Testing
+
+Run the test suite:
 ```bash
-source .venv/bin/activate
+pytest
+```
+
+### Stress Testing
+
+Start the server, then in a separate terminal:
+```bash
 python scripts/stress_test.py --concurrency 50 --duration 15
 ```
 
-More aggressive:
+## Documentation
 
-```bash
-python scripts/stress_test.py --concurrency 200 --duration 30 --timeout 2
-```
+- [Vague Language Detector PRD](vague_language_detector_prd.md) - Product Requirements Document
+- [Vague Language Detector SRD](vague_language_detector_srd.md) - Software Requirements Document
+- [Objective Language Detector PRD](objective_language_detector_prd.md) - Product Requirements Document
+- [Objective Language Detector SRD](objective_language_detector_srd.md) - Software Requirements Document
 
-## Troubleshooting
+## Architecture
 
-### “address already in use” (port 8000 is busy)
+Both services are built using:
+- **FastAPI** - Modern, fast web framework for building APIs
+- **Pydantic** - Data validation using Python type annotations
+- **Uvicorn** - ASGI server implementation
 
-Either run on a different port:
+The services are:
+- Stateless (no database or persistent storage)
+- Deterministic (same input always yields same output)
+- Privacy-focused (no logging or storage of user text)
 
-```bash
-python -m uvicorn vague_language_detector.main:app --host 127.0.0.1 --port 8001
-```
+## License
 
-Or find and stop whatever is using port 8000:
+[Add your license here]
 
-```bash
-lsof -nP -iTCP:8000 -sTCP:LISTEN
-kill <PID>
-```
+## Contact
 
-### Stop the server
-
-Go back to the Terminal running `uvicorn` and press **Ctrl+C**.
+For questions or contributions, please visit [jpagan.com](https://jpagan.com)

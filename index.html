@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Detection Tools - jpagan.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 3rem 2rem;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .project-card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .project-card h3 {
+            color: #764ba2;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .project-card ul {
+            list-style-position: inside;
+            margin-left: 1rem;
+            color: #666;
+        }
+
+        .project-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status.active {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status.coming-soon {
+            background: #ff9800;
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .link-button:hover {
+            background: #764ba2;
+        }
+
+        .link-button.secondary {
+            background: #6c757d;
+        }
+
+        .link-button.secondary:hover {
+            background: #5a6268;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 2rem 1rem;
+            }
+
+            .projects {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Language Detection Tools</h1>
+            <p>FastAPI services for analyzing cognitive distortions and language patterns</p>
+        </header>
+
+        <div class="content">
+            <section class="section">
+                <h2>Projects</h2>
+                <div class="projects">
+                    <div class="project-card">
+                        <span class="status active">Active</span>
+                        <h2>Vague Language Detector</h2>
+                        <p>A lightweight FastAPI service that performs binary detection of vague language patterns and cognitive distortions in text statements.</p>
+                        
+                        <h3>Features:</h3>
+                        <ul>
+                            <li>Binary classification (true/false)</li>
+                            <li>Deterministic heuristics-based detection</li>
+                            <li>No data persistence</li>
+                            <li>Low latency (&lt;100ms)</li>
+                        </ul>
+
+                        <h3>Detection Patterns:</h3>
+                        <ul>
+                            <li>Be-verbs ("to be" verbs)</li>
+                            <li>Absolutist language</li>
+                            <li>Binary framing markers</li>
+                            <li>Global identity-label statements</li>
+                        </ul>
+                    </div>
+
+                    <div class="project-card">
+                        <span class="status coming-soon">Coming Soon</span>
+                        <h2>Objective Language Detector</h2>
+                        <p>A service for detecting objective vs. subjective language patterns in text.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Quick Start</h2>
+                <p>Get started with the Vague Language Detector API:</p>
+                
+                <div class="code-block">
+                    <code>
+# Install dependencies<br>
+pip install -r requirements.txt<br><br>
+# Start the server<br>
+python -m uvicorn vague_language_detector.main:app --host 127.0.0.1 --port 8000<br><br>
+# Test the API<br>
+curl -X POST http://127.0.0.1:8000/classify \<br>
+&nbsp;&nbsp;-H 'Content-Type: application/json' \<br>
+&nbsp;&nbsp;-d '{"text":"I always mess everything up."}'
+                    </code>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Documentation</h2>
+                <p>Comprehensive documentation is available in the repository:</p>
+                <ul>
+                    <li>Product Requirements Documents (PRD)</li>
+                    <li>Software Requirements Documents (SRD)</li>
+                    <li>API documentation (available at /docs when server is running)</li>
+                </ul>
+            </section>
+
+            <div class="links">
+                <a href="https://github.com/jacpagan/vague-language-detector" class="link-button" target="_blank">View on GitHub</a>
+                <a href="/README.md" class="link-button secondary">Read README</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 jpagan.com | Language Detection Tools</p>
+        </footer>
+    </div>
+</body>
+</html>
