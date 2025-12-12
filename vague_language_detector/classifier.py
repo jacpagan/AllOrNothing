@@ -27,6 +27,8 @@ BINARY_MARKERS = {
 
 BE_VERBS = {"am", "is", "are", "was", "were", "be", "being", "been"}
 
+CONTRACTED_SUBJECT_BE = {"i'm", "you're", "we're", "they're", "he's", "she's"}
+
 NEGATIVE_IDENTITY_LABELS = {
     "failure",
     "loser",
@@ -61,11 +63,26 @@ def detect_absolutes(text: str, tokens: List[str]) -> bool:
     return any(t in ABSOLUTE_KEYWORDS for t in tokens)
 
 
-def detect_binary(tokens: List[str]) -> bool:
-    token_set = set(tokens)
-    for pattern in BINARY_MARKERS:
-        if set(pattern).issubset(token_set):
+def detect_binary(text: str, tokens: List[str]) -> bool:
+    # Require ordered/sequenced patterns to avoid distant false positives.
+    lowered = text.lower()
+
+    # "either ... or" with up to 5 words between terms.
+    if re.search(r"\beither\b(?:\W+\w+){0,5}\W+\bor\b", lowered):
+        return True
+
+    # Direct "all or nothing" phrase (supports hyphenated via token walk below).
+    for i in range(len(tokens) - 2):
+        if tokens[i] == "all" and tokens[i + 1] == "or" and tokens[i + 2] == "nothing":
             return True
+
+    # Fallback ordered check within a short window to catch tokenized variants.
+    for idx, token in enumerate(tokens):
+        if token == "either":
+            window_end = min(len(tokens), idx + 7)
+            if "or" in tokens[idx + 1 : window_end]:
+                return True
+
     return False
 
 
@@ -76,8 +93,9 @@ def detect_identity_label_be_phrase(text: str) -> bool:
     lower = text.lower()
     labels = "|".join(sorted(NEGATIVE_IDENTITY_LABELS))
     be = "|".join(sorted(BE_VERBS))
+    contractions = "|".join(sorted(CONTRACTED_SUBJECT_BE))
     pattern = re.compile(
-        rf"\b(i|you|we|they|he|she)\s+({be})\s+(?:a|an|the)?\s*(?:really\s+|so\s+)?({labels})\b"
+        rf"\b(?:(?:i|you|we|they|he|she)\s+(?:{be})|(?:{contractions}))\s+(?:a|an|the)?\s*(?:really\s+|so\s+)?({labels})\b"
     )
     return pattern.search(lower) is not None
 
@@ -92,7 +110,7 @@ def detect(text: str) -> DetectionResult:
     has_distortion = (
         has_be_verb
         or detect_absolutes(text, tokens)
-        or detect_binary(tokens)
+        or detect_binary(text, tokens)
         or detect_identity_label_be_phrase(text)
     )
 
