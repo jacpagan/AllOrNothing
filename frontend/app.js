@@ -54,11 +54,37 @@ async function onSubmit() {
   try {
     const data = await classify(text);
     const flag = Boolean(data.has_cognitive_distortion);
+    const distortions = Array.isArray(data.distortions) ? data.distortions : [];
+    const distortionCount = Number.isFinite(data.distortion_count)
+      ? data.distortion_count
+      : distortions.length;
+
+    const listHtml =
+      distortions.length > 0
+        ? `<div class="distortion-list">
+            ${distortions
+              .map(
+                (d) => `
+                  <div class="distortion-item">
+                    <div class="distortion-header">
+                      <span class="distortion-name">${d.name}</span>
+                      <span class="confidence confidence-${(d.confidence || "medium").toLowerCase()}">${d.confidence || "medium"}</span>
+                    </div>
+                    <div class="distortion-expl">${d.explanation}</div>
+                  </div>
+                `
+              )
+              .join("")}
+          </div>`
+        : `<div class="distortion-list empty">No specific distortions detected.</div>`;
+
     setStatus("Success", "success");
     setResult(
       `<div class="badge ${flag ? "bad" : "good"}">` +
         (flag ? "Cognitive distortion detected" : "No distortion detected") +
       "</div>" +
+      `<div class="distortion-summary">Detected ${distortionCount} distortion${distortionCount === 1 ? "" : "s"}.</div>` +
+      listHtml +
       `<pre>${JSON.stringify(data, null, 2)}</pre>`
     );
   } catch (err) {

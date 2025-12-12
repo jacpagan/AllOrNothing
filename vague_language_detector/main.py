@@ -1,8 +1,10 @@
+import os
+from typing import List
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
-import os
 
 from .classifier import DetectionResult, detect
 
@@ -24,12 +26,32 @@ class TextRequest(BaseModel):
         return v
 
 
+class DistortionOut(BaseModel):
+    name: str
+    explanation: str
+    confidence: str
+
+
 class DetectionResponse(BaseModel):
     has_cognitive_distortion: bool
+    distortion_count: int
+    distortions: List[DistortionOut]
 
     @classmethod
     def from_result(cls, result: DetectionResult) -> "DetectionResponse":
-        return cls(has_cognitive_distortion=result.has_cognitive_distortion)
+        distortions = [
+            DistortionOut(
+                name=d.name,
+                explanation=d.explanation,
+                confidence=d.confidence,
+            )
+            for d in result.distortions
+        ]
+        return cls(
+            has_cognitive_distortion=result.has_cognitive_distortion,
+            distortion_count=len(distortions),
+            distortions=distortions,
+        )
 
 
 app = FastAPI(
