@@ -90,12 +90,16 @@ def detect_identity_label_be_phrase(text: str) -> bool:
     # Detect identity-label constructions like:
     # - "I am a failure"
     # - "You are useless"
+    # - "I'm a total failure"
+    # - "I am a complete failure"
     lower = text.lower()
     labels = "|".join(sorted(NEGATIVE_IDENTITY_LABELS))
     be = "|".join(sorted(BE_VERBS))
     contractions = "|".join(sorted(CONTRACTED_SUBJECT_BE))
+    # Allow optional article, then optional modifiers/adjectives (like "total", "complete", "absolute", "really", "so")
+    # before the negative identity label
     pattern = re.compile(
-        rf"\b(?:(?:i|you|we|they|he|she)\s+(?:{be})|(?:{contractions}))\s+(?:a|an|the)?\s*(?:really\s+|so\s+)?({labels})\b"
+        rf"\b(?:(?:i|you|we|they|he|she)\s+(?:{be})|(?:{contractions}))\s+(?:a|an|the)?\s*(?:\w+\s+)*({labels})\b"
     )
     return pattern.search(lower) is not None
 

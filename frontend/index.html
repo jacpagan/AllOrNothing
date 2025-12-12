@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Objective Language Detector</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Objective Language Detector</h1>
+      <p>FastAPI + AWS Lambda demo. Paste a sentence and see if it contains a cognitive distortion.</p>
+    </header>
+
+    <section class="card">
+      <label for="apiUrl">API base URL (API Gateway HTTP API)</label>
+      <input id="apiUrl" type="url" placeholder="https://abcd1234.execute-api.us-east-1.amazonaws.com" />
+      <small>Use the value of <code>api_endpoint</code> from Terraform outputs.</small>
+
+      <label for="textInput">Text to analyze</label>
+      <textarea id="textInput" rows="3" placeholder="e.g., I always mess everything up."></textarea>
+
+      <div class="actions">
+        <button id="submitBtn">Analyze</button>
+        <div class="quick-picks">
+          <button class="pill" data-text="I always mess everything up.">Always mess up</button>
+          <button class="pill" data-text="I am a failure.">Identity label</button>
+          <button class="pill" data-text="This failed yesterday.">Neutral</button>
+        </div>
+      </div>
+
+      <div id="status" class="status"></div>
+      <div id="result" class="result"></div>
+    </section>
+
+    <section class="card">
+      <h2>How it works</h2>
+      <ol>
+        <li>Terraform deploys Lambda + API Gateway and an S3+CloudFront-hosted frontend.</li>
+        <li>The frontend calls <code>/classify</code> with your text.</li>
+        <li>The Lambda runs the FastAPI app (wrapped with Mangum) and returns a boolean.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
