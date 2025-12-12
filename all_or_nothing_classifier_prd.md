@@ -33,6 +33,11 @@ We need a small, reliable detector that answers one question:
 - **Single input**: one string (`text`)
 - **Low latency** suitable for interactive use
 
+### 4.1 What counts as a “cognitive distortion” in this app (definition)
+For this application, we optimize for **objective truth claims**: language that is not guaranteed to be **100% true in all cases, every single time** is treated as a cognitive distortion signal.
+
+As a result, **any use of “to be” / be-verbs** (e.g., “am/is/are/was/were/be/being/been”) is categorized as a cognitive distortion signal, because it commonly encodes absolute identity or permanence (E-prime rationale).
+
 ---
 
 ## 5. Out of scope (explicit)

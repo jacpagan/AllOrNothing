@@ -24,7 +24,7 @@ The service must do **only this**.
 
 ## 3. Definitions
 - **Statement**: One sentence or short paragraph provided as a single string.
-- **Cognitive distortion**: A pattern in language that indicates distorted thinking. In v2.0, detection is implemented via deterministic heuristics.
+- **Cognitive distortion**: In this application, any language pattern that is not guaranteed to be **100% true in all cases** is treated as a cognitive distortion signal. In v2.0, detection is implemented via deterministic heuristics.
 
 ## 4. System overview
 - Stateless FastAPI service
@@ -57,6 +57,13 @@ The service must do **only this**.
 ```json
 {"has_cognitive_distortion":true}
 ```
+
+#### 5.2.1 Detection heuristic (deterministic)
+The service returns `has_cognitive_distortion=true` when any of the following are detected:
+- **Be-verbs (“to be”) present** (e.g., `am/is/are/was/were/be/being/been`)
+- Absolutist language (e.g., “always/never/everything/nothing”)
+- Binary framing markers (e.g., “either/or”, “all or nothing”)
+- Global identity-label statements (e.g., “I am a failure”)
 
 ## 6. Non-functional requirements
 - **Deterministic**: same input always yields the same output.

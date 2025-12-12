@@ -85,8 +85,13 @@ def detect_identity_label_be_phrase(text: str) -> bool:
 def detect(text: str) -> DetectionResult:
     tokens = tokenize(text)
 
+    # v2.0 objective-function choice:
+    # Treat any "to be" verb usage as a cognitive distortion signal.
+    has_be_verb = any(t in BE_VERBS for t in tokens)
+
     has_distortion = (
-        detect_absolutes(text, tokens)
+        has_be_verb
+        or detect_absolutes(text, tokens)
         or detect_binary(tokens)
         or detect_identity_label_be_phrase(text)
     )

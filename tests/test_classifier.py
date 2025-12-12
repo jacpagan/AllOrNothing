@@ -7,7 +7,8 @@ def test_detects_distortion_with_absolutes():
 
 
 def test_handles_neutral_sentence():
-    result = detect("I am learning to code and I practice daily.")
+    # Neutral example must avoid be-verbs because this app treats be-verbs as distortion signals.
+    result = detect("I practice coding daily.")
     assert result.has_cognitive_distortion is False
 
 
