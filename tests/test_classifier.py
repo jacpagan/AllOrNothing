@@ -48,3 +48,12 @@ def test_does_not_flag_distant_either_or():
         "Either this will eventually after many unexpected delays in the pipeline conclude or not."
     )
     assert result.has_cognitive_distortion is False
+
+
+def test_detects_contracted_with_modifier():
+    # Ensure contractions with modifiers like "total" are detected
+    result1 = detect("I'm a total failure")
+    assert result1.has_cognitive_distortion is True
+    
+    result2 = detect("I am a total failure")
+    assert result2.has_cognitive_distortion is True
